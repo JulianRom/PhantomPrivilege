@@ -47,6 +47,9 @@ void TemplateApplication::Render() {
     m_engine.SetCameraPosition(0.0f, 0.0f);
     m_engine.SetCameraAltitude(10.0f);
 
+    m_engine.ResetLights();
+    m_engine.SetAmbientLight(ysVector4(1.0f, 1.0f, 1.0f, 1.0f));
+
     int color[] = { 0xf1, 0xc4, 0x0f };
     ysMatrix translation = ysMath::TranslationTransform(ysMath::LoadVector(-3.0f, 0.0f, 0.0f));
     m_engine.SetObjectTransform(translation);
@@ -66,4 +69,6 @@ void TemplateApplication::Run() {
 
         m_engine.EndFrame();
     }
+
+    m_engine.Destroy();
 }
