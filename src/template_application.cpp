@@ -37,7 +37,9 @@ void TemplateApplication::Initialize(void *instance, ysContextObject::DEVICE_API
     m_engine.SetClearColor(0x34, 0x98, 0xdb);
 
     m_assetManager.SetEngine(&m_engine);
-    m_engine.LoadTexture(&m_demoTexture, (assetPath + "/chicken.png").c_str());
+
+    m_assetManager.LoadTexture((assetPath + "/chicken.png").c_str(), "chicken");
+    m_demoTexture = m_assetManager.GetTexture("chicken")->GetTexture();
 
     ysError err = m_assetManager.CompileInterchangeFile((assetPath + "/guy").c_str(), 1.0f, true);
     m_assetManager.LoadSceneFile((assetPath + "/guy").c_str(), true);
@@ -62,11 +64,12 @@ void TemplateApplication::Render() {
     
     //m_engine.DrawBox(color, 2.5f, 2.5f);
 
-    m_engine.SetMultiplyColor(ysVector4(1.0f, 1.0f, 1.0f, 1.0f));
+    m_engine.SetMultiplyColor(ysMath::LoadVector(1.0f, 1.0f, 1.0f, 1.0f));
     m_engine.SetObjectTransform(ysMath::LoadIdentity());
     //m_engine.DrawImage(m_demoTexture, 0, (float)m_demoTexture->GetWidth() / m_demoTexture->GetHeight());
-
-    m_engine.DrawModel(m_assetManager.GetModelAsset("Cube"), ysMath::MatMult(rotation, rotationTurntable), 1.0f, nullptr);
+    
+    m_engine.SetObjectTransform(ysMath::MatMult(rotation, rotationTurntable));
+    m_engine.DrawModel(m_assetManager.GetModelAsset("Cube"), 1.0f, nullptr);
 
     if (m_engine.IsKeyDown(ysKeyboard::KEY_SPACE)) {
         m_currentRotation += m_engine.GetFrameLength() * 2;
@@ -82,6 +85,9 @@ void TemplateApplication::Run() {
 
         m_engine.EndFrame();
     }
+}
 
+void TemplateApplication::Destroy() {
+    m_assetManager.Destroy();
     m_engine.Destroy();
 }

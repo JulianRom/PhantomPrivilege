@@ -10,6 +10,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     TemplateApplication app;
     app.Initialize((void *)&hInstance, ysContextObject::DIRECTX11);
     app.Run();
+    app.Destroy();
 
     return 0;
 }

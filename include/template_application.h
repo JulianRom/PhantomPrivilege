@@ -10,6 +10,7 @@ public:
 
     void Initialize(void *instance, ysContextObject::DEVICE_API api);
     void Run();
+    void Destroy();
 
 protected:
     void Process();
