@@ -2,6 +2,7 @@
 
 TemplateApplication::TemplateApplication() {
     m_demoTexture = nullptr;
+    m_currentRotation = 0.0f;
 }
 
 TemplateApplication::~TemplateApplication() {
@@ -37,6 +38,10 @@ void TemplateApplication::Initialize(void *instance, ysContextObject::DEVICE_API
 
     m_assetManager.SetEngine(&m_engine);
     m_engine.LoadTexture(&m_demoTexture, (assetPath + "/chicken.png").c_str());
+
+    ysError err = m_assetManager.CompileInterchangeFile((assetPath + "/guy").c_str(), 1.0f, true);
+    m_assetManager.LoadSceneFile((assetPath + "/guy").c_str(), true);
+    int a = 0;
 }
 
 void TemplateApplication::Process() {
@@ -51,13 +56,21 @@ void TemplateApplication::Render() {
     m_engine.SetAmbientLight(ysVector4(1.0f, 1.0f, 1.0f, 1.0f));
 
     int color[] = { 0xf1, 0xc4, 0x0f };
-    ysMatrix translation = ysMath::TranslationTransform(ysMath::LoadVector(-3.0f, 0.0f, 0.0f));
-    m_engine.SetObjectTransform(translation);
-    m_engine.DrawBox(color, 2.5f, 2.5f);
+    ysMatrix translation = ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f));
+    ysMatrix rotation = ysMath::RotationTransform(ysMath::Constants::XAxis, -ysMath::Constants::PI / 2);
+    ysMatrix rotationTurntable = ysMath::RotationTransform(ysMath::Constants::ZAxis, m_currentRotation);
+    
+    //m_engine.DrawBox(color, 2.5f, 2.5f);
 
     m_engine.SetMultiplyColor(ysVector4(1.0f, 1.0f, 1.0f, 1.0f));
     m_engine.SetObjectTransform(ysMath::LoadIdentity());
-    m_engine.DrawImage(m_demoTexture, 0, (float)m_demoTexture->GetWidth() / m_demoTexture->GetHeight());
+    //m_engine.DrawImage(m_demoTexture, 0, (float)m_demoTexture->GetWidth() / m_demoTexture->GetHeight());
+
+    m_engine.DrawModel(m_assetManager.GetModelAsset("Cube"), ysMath::MatMult(rotation, rotationTurntable), 1.0f, nullptr);
+
+    if (m_engine.IsKeyDown(ysKeyboard::KEY_SPACE)) {
+        m_currentRotation += m_engine.GetFrameLength() * 2;
+    }
 }
 
 void TemplateApplication::Run() {

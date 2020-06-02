@@ -19,6 +19,8 @@ protected:
     dbasic::AssetManager m_assetManager;
 
     ysTexture *m_demoTexture;
+
+    float m_currentRotation;
 };
 
 #endif /* DELTA_TEMPLATE_TEMPLATE_APPLICATION_H */
