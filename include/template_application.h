@@ -16,6 +16,8 @@ protected:
     void Process();
     void Render();
 
+    void DrawDebugScreen();
+
     dbasic::DeltaEngine m_engine;
     dbasic::AssetManager m_assetManager;
 
