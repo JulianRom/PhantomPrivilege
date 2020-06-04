@@ -41,8 +41,8 @@ void TemplateApplication::Initialize(void *instance, ysContextObject::DEVICE_API
     m_assetManager.LoadTexture((assetPath + "/chicken.png").c_str(), "chicken");
     m_demoTexture = m_assetManager.GetTexture("chicken")->GetTexture();
 
-    ysError err = m_assetManager.CompileInterchangeFile((assetPath + "/guy").c_str(), 1.0f, true);
-    m_assetManager.LoadSceneFile((assetPath + "/guy").c_str(), true);
+    ysError err = m_assetManager.CompileInterchangeFile((assetPath + "/icosphere").c_str(), 1.0f, true);
+    m_assetManager.LoadSceneFile((assetPath + "/icosphere").c_str(), true);
     int a = 0;
 }
 
@@ -52,24 +52,44 @@ void TemplateApplication::Process() {
 
 void TemplateApplication::Render() {
     m_engine.SetCameraPosition(0.0f, 0.0f);
-    m_engine.SetCameraAltitude(10.0f);
+    m_engine.SetCameraAltitude(5.0f);
 
     m_engine.ResetLights();
-    m_engine.SetAmbientLight(ysVector4(1.0f, 1.0f, 1.0f, 1.0f));
+    m_engine.SetAmbientLight(ysMath::GetVector4(ysColor::srgbiToLinear(0x34, 0x98, 0xdb)));
 
-    int color[] = { 0xf1, 0xc4, 0x0f };
-    ysMatrix translation = ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f));
-    ysMatrix rotation = ysMath::RotationTransform(ysMath::Constants::XAxis, -ysMath::Constants::PI / 2);
-    ysMatrix rotationTurntable = ysMath::RotationTransform(ysMath::Constants::ZAxis, m_currentRotation);
-    
-    //m_engine.DrawBox(color, 2.5f, 2.5f);
+    dbasic::Light light;
+    light.Active = 1;
+    light.Attenuation0 = 0.0f;
+    light.Attenuation1 = 0.0f;
+    light.Color = ysVector4(0.85f, 0.85f, 0.8f, 1.0f);
+    light.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
+    light.FalloffEnabled = 0;
+    light.Position = ysVector4(10.0f, 10.0f, 10.0f);
+    m_engine.AddLight(light);
 
-    m_engine.SetMultiplyColor(ysMath::LoadVector(1.0f, 1.0f, 1.0f, 1.0f));
-    m_engine.SetObjectTransform(ysMath::LoadIdentity());
-    //m_engine.DrawImage(m_demoTexture, 0, (float)m_demoTexture->GetWidth() / m_demoTexture->GetHeight());
+    dbasic::Light light2;
+    light2.Active = 1;
+    light2.Attenuation0 = 0.0f;
+    light2.Attenuation1 = 0.0f;
+    light2.Color = ysVector4(0.3f, 0.3f, 0.5f, 1.0f);
+    light2.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
+    light2.FalloffEnabled = 0;
+    light2.Position = ysVector4(-10.0f, 10.0f, 10.0f);
+    m_engine.AddLight(light2);
+
+    ysMatrix rotationTurntable = ysMath::RotationTransform(ysMath::Constants::YAxis, m_currentRotation);
     
-    m_engine.SetObjectTransform(ysMath::MatMult(rotation, rotationTurntable));
-    m_engine.DrawModel(m_assetManager.GetModelAsset("Cube"), 1.0f, nullptr);
+    m_engine.SetMultiplyColor(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f));
+    m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f)), rotationTurntable));
+    m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);
+
+    m_engine.SetMultiplyColor(ysColor::srgbiToLinear(0x9b, 0x59, 0xb6));
+    m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(ysMath::LoadVector(3.0f, 0.0f, 0.0f)), rotationTurntable));
+    m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);
+
+    m_engine.SetMultiplyColor(ysColor::srgbiToLinear(0x34, 0x49, 0x5e));
+    m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(ysMath::LoadVector(-3.0f, 0.0f, 0.0f)), rotationTurntable));
+    m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);
 
     if (m_engine.IsKeyDown(ysKeyboard::KEY_SPACE)) {
         m_currentRotation += m_engine.GetFrameLength() * 2;
