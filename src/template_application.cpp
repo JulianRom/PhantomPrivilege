@@ -5,6 +5,7 @@
 TemplateApplication::TemplateApplication() {
     m_demoTexture = nullptr;
     m_currentRotation = 0.0f;
+    m_glow = 0.0f;
 }
 
 TemplateApplication::~TemplateApplication() {
@@ -52,6 +53,16 @@ void TemplateApplication::Process() {
     if (m_engine.IsKeyDown(ysKeyboard::KEY_SPACE)) {
         m_currentRotation += m_engine.GetFrameLength();
     }
+
+    if (m_engine.IsKeyDown(ysKeyboard::KEY_UP)) {
+        m_glow += m_engine.GetFrameLength() * 0.5f;
+    }
+    else if (m_engine.IsKeyDown(ysKeyboard::KEY_DOWN)) {
+        m_glow -= m_engine.GetFrameLength() * 0.5f;
+    }
+
+    if (m_glow < 0.0f) m_glow = 0.0f;
+    if (m_glow > 1.0f) m_glow = 1.0f;
 }
 
 void TemplateApplication::Render() {
@@ -81,18 +92,32 @@ void TemplateApplication::Render() {
     light2.Position = ysVector4(-10.0f, 10.0f, 10.0f);
     m_engine.AddLight(light2);
 
+    dbasic::Light glow;
+    glow.Active = 1;
+    glow.Attenuation0 = 0.0f;
+    glow.Attenuation1 = 0.0f;
+    glow.Color = ysMath::GetVector4(ysMath::Mul(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f), ysMath::LoadScalar(m_glow * 50.0f)));
+    glow.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
+    glow.FalloffEnabled = 1;
+    glow.Position = ysVector4(0.0f, 0.0f, 0.0f);
+    m_engine.AddLight(glow);
+
     ysMatrix rotationTurntable = ysMath::RotationTransform(ysMath::Constants::YAxis, m_currentRotation);
     
     m_engine.SetSpecularRoughness(0.5f);
 
+    m_engine.ResetBrdfParameters();
     m_engine.SetBaseColor(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f));
     m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f)), rotationTurntable));
+    m_engine.SetEmission(ysMath::Mul(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f), ysMath::LoadScalar(m_glow)));
     m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);
 
+    m_engine.ResetBrdfParameters();
     m_engine.SetBaseColor(ysColor::srgbiToLinear(0x9b, 0x59, 0xb6));
     m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(ysMath::LoadVector(3.0f, 0.0f, 0.0f)), rotationTurntable));
     m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);
 
+    m_engine.ResetBrdfParameters();
     m_engine.SetBaseColor(ysColor::srgbiToLinear(0x34, 0x49, 0x5e));
     m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(ysMath::LoadVector(-3.0f, 0.0f, 0.0f)), rotationTurntable));
     m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);

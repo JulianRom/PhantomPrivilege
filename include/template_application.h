@@ -24,6 +24,7 @@ protected:
     ysTexture *m_demoTexture;
 
     float m_currentRotation;
+    float m_glow;
 };
 
 #endif /* DELTA_TEMPLATE_TEMPLATE_APPLICATION_H */
