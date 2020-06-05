@@ -2,6 +2,7 @@
 #define DELTA_TEMPLATE_TEMPLATE_APPLICATION_H
 
 #include "delta.h"
+#include "mouse_controller.h"
 
 class TemplateApplication {
 public:
@@ -25,6 +26,9 @@ protected:
 
     float m_currentRotation;
     float m_glow;
+    ysVector m_planet_position;
+
+    MouseController m_mouse_controller;
 };
 
 #endif /* DELTA_TEMPLATE_TEMPLATE_APPLICATION_H */
