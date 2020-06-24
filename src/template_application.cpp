@@ -37,7 +37,7 @@ void TemplateApplication::Initialize(void *instance, ysContextObject::DEVICE_API
         api,
         (enginePath + "/shaders/").c_str());
 
-    m_engine.SetClearColor(0x34, 0x98, 0xdb);
+    m_engine.SetClearColor(0x11, 0x00, 0x33);
 
     m_assetManager.SetEngine(&m_engine);
 
@@ -61,10 +61,25 @@ void TemplateApplication::Process() {
     }
 
     if (m_engine.IsKeyDown(ysKeyboard::KEY_UP)) {
-        m_glow += m_engine.GetFrameLength() * 0.5f;
+        ysVector movement;
+        movement = ysMath::Sub(m_engine.GetCameraTarget(), m_engine.GetCameraPosition());
+        movement = ysMath::Normalize(movement);
+        movement = ysMath::Mul(movement, ysMath::LoadScalar(6 * m_engine.GetFrameLength()));
+        m_planet_position = ysMath::Add(m_planet_position, movement);
     }
     else if (m_engine.IsKeyDown(ysKeyboard::KEY_DOWN)) {
+        ysVector movement;
+        movement = ysMath::Sub(m_engine.GetCameraTarget(), m_engine.GetCameraPosition());
+        movement = ysMath::Normalize(movement);
+        movement = ysMath::Mul(movement, ysMath::LoadScalar(6 * m_engine.GetFrameLength()));
+        m_planet_position = ysMath::Sub(m_planet_position, movement);
+    }
+
+    if (m_engine.IsKeyDown(ysKeyboard::KEY_LEFT)) {
         m_glow -= m_engine.GetFrameLength() * 0.5f;
+    }
+    else if (m_engine.IsKeyDown(ysKeyboard::KEY_RIGHT)) {
+        m_glow += m_engine.GetFrameLength() * 0.5f;
     }
 
     if (m_glow < 0.0f) m_glow = 0.0f;
@@ -74,30 +89,8 @@ void TemplateApplication::Process() {
 }
 
 void TemplateApplication::Render() {
-    m_engine.SetCameraTarget(m_planet_position);
-
     m_engine.ResetLights();
-    m_engine.SetAmbientLight(ysMath::GetVector4(ysColor::srgbiToLinear(0x34, 0x98, 0xdb)));
-
-    dbasic::Light light;
-    light.Active = 1;
-    light.Attenuation0 = 0.0f;
-    light.Attenuation1 = 0.0f;
-    light.Color = ysVector4(0.85f, 0.85f, 0.8f, 1.0f);
-    light.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
-    light.FalloffEnabled = 0;
-    light.Position = ysVector4(10.0f, 10.0f, 10.0f);
-    m_engine.AddLight(light);
-
-    dbasic::Light light2;
-    light2.Active = 1;
-    light2.Attenuation0 = 0.0f;
-    light2.Attenuation1 = 0.0f;
-    light2.Color = ysVector4(0.3f, 0.3f, 0.5f, 1.0f);
-    light2.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
-    light2.FalloffEnabled = 0;
-    light2.Position = ysVector4(-10.0f, 10.0f, 10.0f);
-    m_engine.AddLight(light2);
+    m_engine.SetAmbientLight(ysMath::GetVector4(ysColor::srgbiToLinear(0x11, 0x00, 0x33)));
 
     dbasic::Light glow;
     glow.Active = 1;
@@ -106,7 +99,7 @@ void TemplateApplication::Render() {
     glow.Color = ysMath::GetVector4(ysMath::Mul(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f), ysMath::LoadScalar(m_glow * 50.0f)));
     glow.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
     glow.FalloffEnabled = 1;
-    glow.Position = ysVector4(0.0f, 0.0f, 0.0f);
+    glow.Position = ysMath::GetVector4(m_planet_position);
     m_engine.AddLight(glow);
 
     ysMatrix rotationTurntable = ysMath::RotationTransform(ysMath::Constants::YAxis, m_currentRotation);
@@ -115,8 +108,8 @@ void TemplateApplication::Render() {
 
     m_engine.ResetBrdfParameters();
     m_engine.SetBaseColor(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f));
-    m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f)), rotationTurntable));
-    m_engine.SetEmission(ysMath::Mul(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f), ysMath::LoadScalar(m_glow)));
+    m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(m_planet_position), rotationTurntable));
+    m_engine.SetEmission(ysMath::Mul(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f), ysMath::LoadScalar(m_glow * 5.0f)));
     m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);
 
     m_engine.ResetBrdfParameters();
@@ -148,6 +141,12 @@ void TemplateApplication::Render() {
     m_engine.SetBaseColor(ysColor::srgbiToLinear(0x84, 0xDC, 0xC6));
     m_engine.SetObjectTransform(ysMath::MatMult(ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, -3.0f)), rotationTurntable));
     m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);
+
+    m_engine.SetDrawTarget(dbasic::DeltaEngine::DrawTarget::Gui);
+    m_engine.SetObjectTransform(ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f)));
+    m_engine.SetBaseColor(ysColor::srgbiToLinear(0xAA, 0x00, 0x99));
+    m_engine.DrawBox(10.0, 10.0, 0, false);
+    m_engine.SetDrawTarget(dbasic::DeltaEngine::DrawTarget::Main);
 
     DrawDebugScreen();
 }

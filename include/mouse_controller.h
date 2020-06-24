@@ -21,8 +21,7 @@ protected:
     int m_pre_x;
     int m_pre_y;
     int m_zoom;
-    float m_phi;
-    float m_rho;
+    ysMatrix m_camera_transform;
 
 };
 

@@ -8,8 +8,7 @@ MouseController::MouseController()
     m_pre_x = 0;
     m_pre_y = 0;
     m_zoom = 10;
-    m_phi = 0.0;
-    m_rho = 0.0;
+    m_camera_transform = ysMath::LoadIdentity();
 }
 
 MouseController::~MouseController()
@@ -28,23 +27,24 @@ void MouseController::process(ysVector &planet_position)
 {
     int x;
     int y;
-
     getMouseChange(&x, &y);
-    m_phi += (float) x * ysMath::Constants::PI / 2000;
-    m_rho += (float) y * ysMath::Constants::PI / 2000;
+    float rho = (float) y * ysMath::Constants::PI / 2000;
+    float phi = (float) x * ysMath::Constants::PI / 2000;
 
-    ysMatrix x_rot = ysMath::RotationTransform(ysMath::Constants::ZAxis, m_phi);
-    ysMatrix y_rot = ysMath::RotationTransform(ysMath::MatMult(x_rot, ysMath::Constants::XAxis), m_rho);
+    ysMatrix x_rot = ysMath::RotationTransform(ysMath::Constants::ZAxis, -phi);
+    ysMatrix y_rot = ysMath::RotationTransform(ysMath::Constants::XAxis, rho);
+    
     ysVector camera_radius = ysMath::LoadVector(0, (float) m_zoom, 0, 0);
+    m_camera_transform = ysMath::MatMult(m_camera_transform, x_rot);
+    m_camera_transform = ysMath::MatMult(m_camera_transform, y_rot);
+    ysVector camera_relative_position = ysMath::MatMult(m_camera_transform, camera_radius);
 
-    ysVector camera_relative_position = ysMath::MatMult(x_rot, camera_radius);
-    camera_relative_position = ysMath::MatMult(y_rot, camera_relative_position);
-
-    ysVector camera_up = ysMath::MatMult(y_rot, ysMath::Constants::ZAxis);
+    ysVector camera_up = ysMath::MatMult(m_camera_transform, ysMath::Constants::ZAxis);
 
     ysVector camera_position = ysMath::Add(planet_position, camera_relative_position);
     m_engine->SetCameraPosition(camera_position);
     m_engine->SetCameraUp(camera_up);
+    m_engine->SetCameraTarget(ysMath::Add(planet_position, ysMath::Mul(camera_up, ysMath::LoadScalar(1.5))));
 }
 
 void MouseController::getMouseChange(int *x, int *y)
