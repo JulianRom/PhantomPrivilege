@@ -53,6 +53,9 @@ void TemplateApplication::Initialize(void *instance, ysContextObject::DEVICE_API
     m_engine.SetCameraMode(dbasic::DeltaEngine::CameraMode::Target);
     m_engine.SetCameraPosition(ysMath::Constants::Zero);
     m_engine.SetCameraTarget(ysMath::Constants::Zero);
+
+    m_engine.SetCursorPositionLock(true);
+    m_engine.SetCursorHidden(false);
 }
 
 void TemplateApplication::Process() {
@@ -145,7 +148,7 @@ void TemplateApplication::Render() {
     m_engine.SetDrawTarget(dbasic::DeltaEngine::DrawTarget::Gui);
     m_engine.SetObjectTransform(ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f)));
     m_engine.SetBaseColor(ysColor::srgbiToLinear(0xAA, 0x00, 0x99));
-    m_engine.DrawBox(10.0, 10.0, 0, false);
+    m_engine.DrawBox(10.0, 10.0, 0);
     m_engine.SetDrawTarget(dbasic::DeltaEngine::DrawTarget::Main);
 
     DrawDebugScreen();
