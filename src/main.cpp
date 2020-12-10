@@ -8,7 +8,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     (void)hPrevInstance;
 
     TemplateApplication app;
-    app.Initialize((void *)&hInstance, ysContextObject::OPENGL4_0); 
+    app.Initialize((void *)&hInstance, ysContextObject::DeviceAPI::OpenGL4_0); 
     app.Run();
     app.Destroy();
 

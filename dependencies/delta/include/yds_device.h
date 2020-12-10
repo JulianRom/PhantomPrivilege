@@ -19,11 +19,11 @@ struct ysTextureSlot {
 class ysDevice : public ysContextObject {
 protected:
     ysDevice();
-    ysDevice(ysContextObject::DEVICE_API API);
+    ysDevice(ysContextObject::DeviceAPI API);
     virtual ~ysDevice();
 
 public:
-    static ysError CreateDevice(ysDevice **device, DEVICE_API API);
+    static ysError CreateDevice(ysDevice **device, DeviceAPI API);
 
     /* Main Device Interface */
 
@@ -170,6 +170,9 @@ public:
     // Create a texture from a file
     virtual ysError CreateTexture(ysTexture **texture, const char *fname) = 0;
 
+    // Create an alpha texture from an in-memory buffer
+    virtual ysError CreateAlphaTexture(ysTexture **texture, int width, int height, const unsigned char *buffer) = 0;
+
     // Destroy a texture
     virtual ysError DestroyTexture(ysTexture *&texture);
 
@@ -181,6 +184,8 @@ public:
 
     // Initialize texture slots
     ysError InitializeTextureSlots(int maxSlots);
+
+    /* Debug */
 
     // TEMP
     virtual void Draw(int numFaces, int indexOffset, int vertexOffset) { (void)numFaces; (void)indexOffset; (void)vertexOffset; }

@@ -9,7 +9,7 @@ public:
     TemplateApplication();
     ~TemplateApplication();
 
-    void Initialize(void *instance, ysContextObject::DEVICE_API api);
+    void Initialize(void *instance, ysContextObject::DeviceAPI api);
     void Run();
     void Destroy();
 

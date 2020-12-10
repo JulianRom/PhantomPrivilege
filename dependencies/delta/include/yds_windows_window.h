@@ -21,8 +21,7 @@ public:
 
     virtual bool SetWindowStyle(WindowStyle style);
 
-    //virtual void PrepareFullscreen();
-    //virtual void PrepareWindowed();
+    virtual void ScreenToLocal(int &x, int &y);
 
     virtual bool IsVisible();
 
@@ -43,7 +42,7 @@ protected:
 
     virtual void Close();
     virtual void SetTitle(const char *title);
-    virtual void SetState(WindowState state = WindowState::VISIBLE);
+    virtual void SetState(WindowState state = WindowState::Visible);
 
     virtual void AL_SetSize(int width, int height);
     virtual void AL_SetLocation(int x, int y);

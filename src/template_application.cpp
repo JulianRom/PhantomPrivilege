@@ -12,7 +12,7 @@ TemplateApplication::~TemplateApplication() {
     /* void */
 }
 
-void TemplateApplication::Initialize(void *instance, ysContextObject::DEVICE_API api) {
+void TemplateApplication::Initialize(void *instance, ysContextObject::DeviceAPI api) {
     dbasic::Path modulePath = dbasic::GetModulePath();
     dbasic::Path confPath = modulePath.Append("delta.conf");
 
@@ -31,22 +31,27 @@ void TemplateApplication::Initialize(void *instance, ysContextObject::DEVICE_API
 
     m_engine.GetConsole()->SetDefaultFontDirectory(enginePath + "/fonts/");
 
-    m_engine.CreateGameWindow(
-        "Delta Template Application",
-        instance,
-        api,
-        (enginePath + "/shaders/").c_str());
+    const std::string shaderPath = (enginePath + "/shaders/").c_str();
+    
+    dbasic::DeltaEngine::GameEngineSettings settings;
+    settings.API = api;
+    settings.DepthBuffer = true;
+    settings.FrameLogging = false;
+    settings.Instance = instance;
+    settings.LoggingDirectory = "";
+    settings.ShaderDirectory = shaderPath.c_str();
+    settings.WindowTitle = "Beef Planet";
+    ysError err = m_engine.CreateGameWindow(settings);
 
-    m_engine.SetClearColor(0x11, 0x00, 0x33);
+    m_engine.SetClearColor(ysColor::srgbiToLinear(0x11, 0x00, 0x33));
 
     m_assetManager.SetEngine(&m_engine);
 
     m_assetManager.LoadTexture((assetPath + "/chicken.png").c_str(), "chicken");
     m_demoTexture = m_assetManager.GetTexture("chicken")->GetTexture();
 
-    ysError err = m_assetManager.CompileInterchangeFile((assetPath + "/icosphere").c_str(), 1.0f, true);
+    err = m_assetManager.CompileInterchangeFile((assetPath + "/icosphere").c_str(), 1.0f, true);
     m_assetManager.LoadSceneFile((assetPath + "/icosphere").c_str(), true);
-    int a = 0;
 
     m_mouse_controller.initialize(&m_engine);
     m_planet_position = ysMath::Constants::Zero;
@@ -160,14 +165,11 @@ void TemplateApplication::DrawDebugScreen() {
     ss << m_engine.GetAverageFramerate();
 
     m_engine.GetConsole()->Clear();
-    m_engine.GetConsole()->MoveToLocation({ 1, 2 });
+    m_engine.GetConsole()->MoveToOrigin();
 
-    m_engine.GetConsole()->SetFontBold(true);
     m_engine.GetConsole()->DrawGeneralText("/// Debug Console ///\n");
 
-    m_engine.GetConsole()->SetFontBold(false);
     m_engine.GetConsole()->DrawGeneralText("FPS: ");
-    m_engine.GetConsole()->SetFontBold(true);
     m_engine.GetConsole()->DrawGeneralText(ss.str().c_str());
 }
 
