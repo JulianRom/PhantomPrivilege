@@ -3,26 +3,28 @@
 
 #include "delta.h"
 
-class MouseController {
-public:
-    MouseController();
-    ~MouseController();
+namespace bp {
+    class MouseController {
+    public:
+        MouseController();
+        ~MouseController();
 
-    void initialize(dbasic::DeltaEngine *engine);
-    void process(ysVector &planet_position);
-    void destroy();
+        void initialize(dbasic::DeltaEngine* engine);
+        void process(const ysVector& planet_position);
+        void destroy();
+        void setZoom(float zoom) { m_zoom = zoom; }
 
-protected:
+    protected:
 
-    void getMouseChange(int *x, int *y);
-    dbasic::DeltaEngine *m_engine;
-    int m_mouse_x;
-    int m_mouse_y;
-    int m_pre_x;
-    int m_pre_y;
-    int m_zoom;
-    ysMatrix m_camera_transform;
+        void getMouseChange(int* x, int* y);
+        dbasic::DeltaEngine* m_engine;
+        int m_mouse_x;
+        int m_mouse_y;
+        int m_pre_x;
+        int m_pre_y;
+        float m_zoom;
+        ysMatrix m_camera_transform;
 
-};
-
-#endif
+    };
+}  /* namespace bp */
+#endif  /* BEEF_PLANET_MOUSE_CONTROLLER_H */

@@ -1,7 +1,7 @@
-#ifndef DELTA_TEMPLATE_DELTA_INCLUDES_H
-#define DELTA_TEMPLATE_DELTA_INCLUDES_H
+#ifndef BEEF_PLANET_DELTA_INCLUDES_H
+#define BEEF_PLANET_DELTA_INCLUDES_H
 
 #include <delta/include/yds_core.h>
 #include <delta/engines/basic/include/delta_basic_engine.h>
 
-#endif /* DELTA_TEMPLATE_DELTA_INCLUDES_H */
+#endif /* BEEF_PLANET_DELTA_INCLUDES_H */

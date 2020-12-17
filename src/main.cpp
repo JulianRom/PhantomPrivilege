@@ -1,4 +1,4 @@
-#include "../include/template_application.h"
+#include "../include/beef_planet.h"
 
 #include <iostream>
 
@@ -7,7 +7,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     (void)lpCmdLine;
     (void)hPrevInstance;
 
-    TemplateApplication app;
+    bp::BeefPlanet app;
     app.Initialize((void *)&hInstance, ysContextObject::DeviceAPI::OpenGL4_0); 
     app.Run();
     app.Destroy();
