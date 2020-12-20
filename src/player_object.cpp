@@ -18,21 +18,21 @@ void bp::PlayerObject::initialize(dbasic::DeltaEngine* engine, Universe* univers
 
 void bp::PlayerObject::process(float dt)
 {
-    if (m_engine->IsKeyDown(ysKeyboard::KEY_A)) {
+    if (m_engine->IsKeyDown(ysKey::Code::A)) {
 		updateMass(50.0);
     }
-    else if (m_engine->IsKeyDown(ysKeyboard::KEY_D)) {
+    else if (m_engine->IsKeyDown(ysKey::Code::D)) {
 		updateMass(10000.0);
     }
 
-    if (m_engine->IsKeyDown(ysKeyboard::KEY_W)) {
+    if (m_engine->IsKeyDown(ysKey::Code::W)) {
         ysVector movement;
         movement = ysMath::Sub(m_engine->GetCameraTarget(), m_engine->GetCameraPosition());
         movement = ysMath::Normalize(movement);
         movement = ysMath::Mul(movement, ysMath::LoadScalar(6 * m_engine->GetFrameLength()));
         getPhysicsComponent()->m_transform.SetPosition(ysMath::Add(getPhysicsComponent()->m_transform.GetWorldPosition(), movement));
     }
-    else if (m_engine->IsKeyDown(ysKeyboard::KEY_S)) {
+    else if (m_engine->IsKeyDown(ysKey::Code::S)) {
         ysVector movement;
         movement = ysMath::Sub(m_engine->GetCameraTarget(), m_engine->GetCameraPosition());
         movement = ysMath::Normalize(movement);

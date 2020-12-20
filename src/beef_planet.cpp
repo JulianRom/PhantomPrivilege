@@ -124,7 +124,7 @@ void bp::BeefPlanet::DrawDebugScreen() {
 }
 
 void bp::BeefPlanet::Run() {
-    while (m_engine.IsOpen() && !m_engine.IsKeyDown(ysKeyboard::KEY_ESCAPE)) {
+    while (m_engine.IsOpen() && !m_engine.IsKeyDown(ysKey::Code::Escape)) {
         m_engine.StartFrame();
 
         Process();
