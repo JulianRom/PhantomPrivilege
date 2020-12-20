@@ -67,6 +67,9 @@ void bp::BeefPlanet::Initialize(void *instance, ysContextObject::DeviceAPI api) 
     m_player = m_universe.spawn<PlayerObject>();
     m_player->getPhysicsComponent()->m_transform.SetPosition(ysMath::LoadVector(0.0f, 0.0f, 0.0f));
     m_player->setModel(m_assetManager.GetModelAsset("Icosphere"));
+
+    m_engine.SetNearClip(1.0f);
+    m_engine.SetFarClip(500.0f);
 }
 
 void bp::BeefPlanet::Process() {
