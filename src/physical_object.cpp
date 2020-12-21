@@ -33,6 +33,7 @@ void bp::PhysicalObject::render()
     m_engine->ResetBrdfParameters();
     m_engine->SetBaseColor(m_color);
     m_engine->SetObjectTransform(m_physics_component.m_transform.GetWorldTransform());
+    m_engine->SetSpecularRoughness(1.0f);
     m_engine->DrawModel(m_model, m_size, nullptr);
 }
 

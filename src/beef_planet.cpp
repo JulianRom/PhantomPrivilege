@@ -45,7 +45,8 @@ void bp::BeefPlanet::Initialize(void *instance, ysContextObject::DeviceAPI api) 
     settings.WindowTitle = "Beef Planet";
     ysError err = m_engine.CreateGameWindow(settings);
 
-    m_engine.SetClearColor(ysColor::srgbiToLinear(0x22, 0x00, 0x44));
+    const ysVector clearColor = ysColor::srgbiToLinear(0x11, 0x00, 0x22);
+    m_engine.SetClearColor(clearColor);
 
     m_assetManager.SetEngine(&m_engine);
 
@@ -69,7 +70,11 @@ void bp::BeefPlanet::Initialize(void *instance, ysContextObject::DeviceAPI api) 
     m_player->setModel(m_assetManager.GetModelAsset("Icosphere"));
 
     m_engine.SetNearClip(1.0f);
-    m_engine.SetFarClip(500.0f);
+    m_engine.SetFarClip(300.0f);
+
+    m_engine.SetFogNear(150.0f);
+    m_engine.SetFogFar(300.0f);
+    m_engine.SetFogColor(clearColor);
 }
 
 void bp::BeefPlanet::Process() {
@@ -78,7 +83,7 @@ void bp::BeefPlanet::Process() {
 
 void bp::BeefPlanet::Render() {
     m_engine.ResetLights();
-    m_engine.SetAmbientLight(ysMath::GetVector4(ysColor::srgbiToLinear(0x33, 0x00, 0x55)));
+    m_engine.SetAmbientLight(ysMath::GetVector4(ysColor::srgbiToLinear(0x11, 0x00, 0x22)));
 
     dbasic::Light glow;
     glow.Active = 1;
