@@ -24,6 +24,7 @@ namespace bp {
         PhysicsComponent* getPhysicsComponent() { return &m_physics_component; }
 
         virtual void updateMass(float mass);
+        float getSize() { return m_size; }
 
     protected:
         PhysicsComponent m_physics_component;

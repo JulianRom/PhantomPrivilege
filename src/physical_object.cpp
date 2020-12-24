@@ -8,6 +8,8 @@ bp::PhysicalObject::PhysicalObject()
 {
     m_model = nullptr;
     m_size = 1.0;
+    m_physics_component.setParent(this);
+    m_color = ysMath::Constants::Zero;
 }
 
 bp::PhysicalObject::~PhysicalObject()
@@ -20,7 +22,7 @@ void bp::PhysicalObject::initialize(dbasic::DeltaEngine* engine, Universe* unive
 
     universe->getGravitySimulator()->registerComponent(&m_physics_component);
 
-    m_color = ysColor::srgbiToLinear(ysMath::UniformRandomInt(255), ysMath::UniformRandomInt(255), ysMath::UniformRandomInt(255));
+    m_color = ysColor::srgbiToLinear(ysMath::UniformRandomInt(200) + 55, ysMath::UniformRandomInt(200) + 55, ysMath::UniformRandomInt(200) + 55);
 }
 
 void bp::PhysicalObject::process(float dt)

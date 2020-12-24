@@ -3,7 +3,10 @@
 
 #include "delta.h"
 
+#include <vector>
+
 namespace bp {
+    class PhysicalObject;
     class PhysicsComponent {
     public:
         PhysicsComponent();
@@ -19,11 +22,17 @@ namespace bp {
         void forceClear() { m_force_accumulator = ysMath::Constants::Zero; }
         void forceAdd(const ysVector &force) { m_force_accumulator = ysMath::Add(m_force_accumulator, force); }
         ysVector getVelocity() { return m_velocity; }
+        void setParent(PhysicalObject* parent) { m_parent = parent; }
+        PhysicalObject* getParent() { return m_parent; }
+        void clearIntersection();
+        void addIntersection(PhysicalObject* secondObject);
 
     private:
         float m_inverse_mass;
         ysVector m_force_accumulator;
         ysVector m_velocity;
+        std::vector <PhysicalObject*> m_intersections;
+        PhysicalObject* m_parent;
     };
 } /* namespace bp */
 

@@ -14,12 +14,14 @@ namespace bp {
 
         void integrate(float dt);
         void generateForces();
+        void clearForces();
 
         void registerComponent(PhysicsComponent *component);
         void deregisterComponent(PhysicsComponent *component);
 
     private:
         std::vector<PhysicsComponent *> m_components;
+        float m_G;
     };
 
 } /* namespace bp */

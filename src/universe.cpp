@@ -18,12 +18,14 @@ void bp::Universe::process(float dt)
 {
     worldDestroyer();
     processSpawnQueue();
+    m_gravity_simulator.clearForces();
     m_gravity_simulator.generateForces();
-    m_gravity_simulator.integrate(dt);
-
+    
     for (GameObject* object : m_game_objects) {
         object->process(dt);
     }
+
+    m_gravity_simulator.integrate(dt);
 }
 
 void bp::Universe::render()

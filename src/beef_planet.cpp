@@ -45,7 +45,7 @@ void bp::BeefPlanet::Initialize(void *instance, ysContextObject::DeviceAPI api) 
     settings.WindowTitle = "Beef Planet";
     ysError err = m_engine.CreateGameWindow(settings);
 
-    const ysVector clearColor = ysColor::srgbiToLinear(0x11, 0x00, 0x22);
+    const ysVector clearColor = ysColor::srgbiToLinear(0x22, 0x00, 0x33);
     m_engine.SetClearColor(clearColor);
 
     m_assetManager.SetEngine(&m_engine);
@@ -58,7 +58,7 @@ void bp::BeefPlanet::Initialize(void *instance, ysContextObject::DeviceAPI api) 
     m_engine.SetCameraTarget(ysMath::Constants::Zero);
 
     m_engine.SetCursorPositionLock(true);
-    m_engine.SetCursorHidden(false);
+    m_engine.SetCursorHidden(true);
 
     m_universe.initialize(&m_engine);
 
@@ -83,26 +83,34 @@ void bp::BeefPlanet::Process() {
 
 void bp::BeefPlanet::Render() {
     m_engine.ResetLights();
-    m_engine.SetAmbientLight(ysMath::GetVector4(ysColor::srgbiToLinear(0x11, 0x00, 0x22)));
+    m_engine.SetAmbientLight(ysMath::GetVector4(ysColor::srgbiToLinear(0x22, 0x00, 0x33)));
 
-    dbasic::Light glow;
-    glow.Active = 1;
-    glow.Attenuation0 = 0.0f;
-    glow.Attenuation1 = 0.0f;
-    glow.Color = ysMath::GetVector4(ysMath::Mul(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f), ysMath::LoadScalar(50.0f)));
-    glow.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
-    glow.FalloffEnabled = 1;
-    glow.Position = ysMath::GetVector4(m_player->getPhysicsComponent()->m_transform.GetWorldPosition());
-    m_engine.AddLight(glow);
-    
-    m_engine.SetSpecularRoughness(0.5f);
+    dbasic::Light sun;
+    sun.Active = 1;
+    sun.Attenuation0 = 0.0f;
+    sun.Attenuation1 = 0.0f;
+    sun.Color = ysMath::GetVector4(ysMath::Mul(ysColor::srgbiToLinear(0x33, 0x33, 0x77), ysMath::LoadScalar(1.0f)));
+    sun.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
+    sun.FalloffEnabled = 0;
+    sun.Position = ysMath::GetVector4(ysMath::LoadVector(0.0,1000.0,0.0));
+    m_engine.AddLight(sun);
+
+    dbasic::Light sun2;
+    sun2.Active = 1;
+    sun2.Attenuation0 = 0.0f;
+    sun2.Attenuation1 = 0.0f;
+    sun2.Color = ysMath::GetVector4(ysMath::Mul(ysColor::srgbiToLinear(0x77, 0x33, 0x33), ysMath::LoadScalar(1.0f)));
+    sun2.Direction = ysVector4(0.0f, 0.0f, 0.0f, 0.0f);
+    sun2.FalloffEnabled = 0;
+    sun2.Position = ysMath::GetVector4(ysMath::LoadVector(0.0, -1000.0, 0.0));
+    m_engine.AddLight(sun2);
 
     m_universe.render();
 
-    m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0f, nullptr);
     m_engine.SetDrawTarget(dbasic::DeltaEngine::DrawTarget::Gui);
     m_engine.SetObjectTransform(ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f)));
-    m_engine.SetBaseColor(ysColor::srgbiToLinear(0xAA, 0x00, 0x99));
+    m_engine.SetBaseColor(ysColor::srgbiToLinear(0xFF, 0xFF, 0xFF));
+    m_engine.SetLit(false);
     m_engine.DrawBox(10.0, 10.0, 0);
     m_engine.SetDrawTarget(dbasic::DeltaEngine::DrawTarget::Main);
 
@@ -123,9 +131,16 @@ void bp::BeefPlanet::DrawDebugScreen() {
     m_engine.GetConsole()->DrawGeneralText(ss.str().c_str());
 
     ss = std::stringstream();
-    ss << m_universe.getGameObjectCount();
+    ss << m_universe.getGameObjectCount() << "\n";
 
     m_engine.GetConsole()->DrawGeneralText(ss.str().c_str());
+
+    ss = std::stringstream();
+    ysVector player = m_player->getPhysicsComponent()->m_transform.GetWorldPosition();
+    ss << ysMath::GetX(player) << ", " << ysMath::GetY(player) << ", " << ysMath::GetZ(player);
+
+    m_engine.GetConsole()->DrawGeneralText(ss.str().c_str());
+
 }
 
 void bp::BeefPlanet::Run() {
