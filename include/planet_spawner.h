@@ -9,23 +9,23 @@
 
 namespace bp {
 
-	class PlanetSpawner : public GameObject {
-	public:
-		PlanetSpawner();
-		virtual ~PlanetSpawner();
+    class PlanetSpawner : public GameObject {
+    public:
+        PlanetSpawner();
+        virtual ~PlanetSpawner();
 
-		virtual void initialize(dbasic::DeltaEngine* engine, Universe* universe);
+        virtual void initialize(dbasic::DeltaEngine* engine, Universe* universe);
 
-		virtual void process(float dt);
-		virtual void render();
+        virtual void process(float dt);
+        virtual void render();
 
-		void setModel(dbasic::ModelAsset* asset) { m_model = asset; }
+        void setModel(dbasic::ModelAsset* asset) { m_model = asset; }
 
-	private:
-		void planetCreation();
-		float m_cooldown;
-		dbasic::ModelAsset* m_model;
-	};
+    private:
+        void planetCreation();
+        float m_cooldown;
+        dbasic::ModelAsset* m_model;
+    };
 
 } /* namespace bp */
 

@@ -11,7 +11,7 @@ bp::PlayerObject::~PlayerObject()
 
 void bp::PlayerObject::initialize(dbasic::DeltaEngine* engine, Universe* universe)
 {
-	PhysicalObject::initialize(engine, universe);
+    PhysicalObject::initialize(engine, universe);
     m_mouse_controller.initialize(engine);
     updateMass(50.0);
 }
@@ -19,10 +19,10 @@ void bp::PlayerObject::initialize(dbasic::DeltaEngine* engine, Universe* univers
 void bp::PlayerObject::process(float dt)
 {
     if (m_engine->IsKeyDown(ysKey::Code::A)) {
-		updateMass(50.0);
+        updateMass(50.0);
     }
     else if (m_engine->IsKeyDown(ysKey::Code::D)) {
-		updateMass(10000.0);
+        updateMass(10000.0);
     }
 
     if (m_engine->IsKeyDown(ysKey::Code::W)) {
@@ -45,15 +45,15 @@ void bp::PlayerObject::process(float dt)
 
 void bp::PlayerObject::render()
 {
-	m_engine->ResetBrdfParameters();
-	m_engine->SetBaseColor(m_color);
-	m_engine->SetObjectTransform(m_physics_component.m_transform.GetWorldTransform());
-	m_engine->SetEmission(ysMath::Mul(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f), ysMath::LoadScalar(5.0f)));
-	m_engine->DrawModel(m_model, m_size, nullptr);
+    m_engine->ResetBrdfParameters();
+    m_engine->SetBaseColor(m_color);
+    m_engine->SetObjectTransform(m_physics_component.m_transform.GetWorldTransform());
+    m_engine->SetEmission(ysMath::Mul(ysColor::srgbiToLinear(0xf1, 0xc4, 0x0f), ysMath::LoadScalar(5.0f)));
+    m_engine->DrawModel(m_model, m_size, nullptr);
 }
 
 void bp::PlayerObject::updateMass(float mass)
 {
-	PhysicalObject::updateMass(mass);
+    PhysicalObject::updateMass(mass);
     m_mouse_controller.setZoom(m_size * 7);
 }

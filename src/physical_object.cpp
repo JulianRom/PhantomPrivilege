@@ -18,7 +18,7 @@ void bp::PhysicalObject::initialize(dbasic::DeltaEngine* engine, Universe* unive
 {
     GameObject::initialize(engine, universe);
 
-	universe->getGravitySimulator()->registerComponent(&m_physics_component);
+    universe->getGravitySimulator()->registerComponent(&m_physics_component);
 
     m_color = ysColor::srgbiToLinear(ysMath::UniformRandomInt(255), ysMath::UniformRandomInt(255), ysMath::UniformRandomInt(255));
 }

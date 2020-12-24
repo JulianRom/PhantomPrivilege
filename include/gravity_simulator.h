@@ -7,20 +7,20 @@
 
 namespace bp {
 
-	class GravitySimulator {
-	public:
-		GravitySimulator();
-		~GravitySimulator();
+    class GravitySimulator {
+    public:
+        GravitySimulator();
+        ~GravitySimulator();
 
-		void integrate(float dt);
-		void generateForces();
+        void integrate(float dt);
+        void generateForces();
 
-		void registerComponent(PhysicsComponent *component);
-		void deregisterComponent(PhysicsComponent *component);
+        void registerComponent(PhysicsComponent *component);
+        void deregisterComponent(PhysicsComponent *component);
 
-	private:
-		std::vector<PhysicsComponent *> m_components;
-	};
+    private:
+        std::vector<PhysicsComponent *> m_components;
+    };
 
 } /* namespace bp */
 

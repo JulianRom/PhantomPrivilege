@@ -10,40 +10,40 @@
 
 namespace bp {
 
-	class Universe {
-	public:
-		Universe();
-		~Universe();
+    class Universe {
+    public:
+        Universe();
+        ~Universe();
 
-		void initialize(dbasic::DeltaEngine* engine);
+        void initialize(dbasic::DeltaEngine* engine);
 
-		void process(float dt);
-		void render();
+        void process(float dt);
+        void render();
 
-		template<typename T_GameObject>
-		T_GameObject* spawn() {
-			T_GameObject* newObject = new T_GameObject;
-			newObject->initialize(m_engine, this);
+        template<typename T_GameObject>
+        T_GameObject* spawn() {
+            T_GameObject* newObject = new T_GameObject;
+            newObject->initialize(m_engine, this);
 
-			m_spawn_queue.push_back(newObject);
+            m_spawn_queue.push_back(newObject);
 
-			return newObject;
-		}
+            return newObject;
+        }
 
-		GravitySimulator* getGravitySimulator() { return &m_gravity_simulator; }
+        GravitySimulator* getGravitySimulator() { return &m_gravity_simulator; }
 
-		int getGameObjectCount() const { return m_game_objects.size(); }
+        int getGameObjectCount() const { return m_game_objects.size(); }
 
-	private:
-		void processSpawnQueue();
-		void worldDestroyer();
-		GravitySimulator m_gravity_simulator;
+    private:
+        void processSpawnQueue();
+        void worldDestroyer();
+        GravitySimulator m_gravity_simulator;
 
-	private:
-		dbasic::DeltaEngine* m_engine;
-		std::vector<GameObject *> m_spawn_queue;
-		std::vector<GameObject *> m_game_objects;
-	};
+    private:
+        dbasic::DeltaEngine* m_engine;
+        std::vector<GameObject *> m_spawn_queue;
+        std::vector<GameObject *> m_game_objects;
+    };
 
 } /* namespace bp */
 

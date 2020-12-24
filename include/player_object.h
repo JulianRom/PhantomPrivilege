@@ -11,22 +11,22 @@
 
 namespace bp {
 
-	class PlayerObject : public PhysicalObject {
-	public:
-		PlayerObject();
-		virtual ~PlayerObject();
+    class PlayerObject : public PhysicalObject {
+    public:
+        PlayerObject();
+        virtual ~PlayerObject();
 
-		virtual void initialize(dbasic::DeltaEngine* engine, Universe* universe);
+        virtual void initialize(dbasic::DeltaEngine* engine, Universe* universe);
 
-		virtual void process(float dt);
-		virtual void render();
+        virtual void process(float dt);
+        virtual void render();
 
-		virtual void updateMass(float mass);
+        virtual void updateMass(float mass);
 
-	private:
-		MouseController m_mouse_controller;
+    private:
+        MouseController m_mouse_controller;
 
-	};
+    };
 
 } /* namespace bp */
 
