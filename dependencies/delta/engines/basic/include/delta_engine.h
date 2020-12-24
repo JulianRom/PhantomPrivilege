@@ -86,7 +86,7 @@ namespace dbasic {
 
         void SubmitSkeleton(Skeleton *skeleton);
 
-        bool IsOpen() { return m_gameWindow->IsOpen(); }
+        bool IsOpen() const { return m_gameWindow->IsOpen(); }
 
         void SetWindowSize(int width, int height);
 
@@ -122,13 +122,13 @@ namespace dbasic {
         void SetPositionOffset(const ysVector &position);
 
         // Input Device
-        bool IsKeyDown(ysKeyboard::KEY_CODE key);
-        bool ProcessKeyDown(ysKeyboard::KEY_CODE key);
-        bool ProcessKeyUp(ysKeyboard::KEY_CODE key);
+        bool IsKeyDown(ysKey::Code key);
+        bool ProcessKeyDown(ysKey::Code key);
+        bool ProcessKeyUp(ysKey::Code key);
 
-        bool ProcessMouseKeyDown(ysMouse::Button key);
-        bool ProcessMouseKeyUp(ysMouse::Button key);
-        bool IsMouseKeyDown(ysMouse::Button key);
+        bool ProcessMouseButtonDown(ysMouse::Button button);
+        bool ProcessMouseButtonUp(ysMouse::Button button);
+        bool IsMouseButtonDown(ysMouse::Button button);
         int GetMouseWheel();
         void GetMousePos(int *x, int *y);
         void GetOsMousePos(int *x, int *y);
@@ -155,6 +155,15 @@ namespace dbasic {
         void SetSpecularRoughness(float specularRoughness);
         void SetSpecularPower(float power);
         void SetIncidentSpecular(float incidentSpecular);
+        void SetFogNear(float fogNear);
+        void SetFogFar(float fogFar);
+        void SetFogColor(const ysVector &color);
+
+        void SetNearClip(float nearClip) { m_nearClip = nearClip; }
+        float GetNearClip() const { return m_nearClip; }
+
+        void SetFarClip(float farClip) { m_farClip = farClip; }
+        float GetFarClip() const { return m_farClip; }
 
         ysDevice *GetDevice() { return m_device; }
 
@@ -172,6 +181,9 @@ namespace dbasic {
     protected:
         float m_cameraAngle;
         float m_cameraFov;
+
+        float m_nearClip;
+        float m_farClip;
 
         ysVector m_cameraPosition;
         ysVector m_cameraTarget;
@@ -198,8 +210,8 @@ namespace dbasic {
         ysGPUBuffer *m_mainVertexBuffer;
         ysGPUBuffer *m_mainIndexBuffer;
 
-        ysInputDevice *m_mainKeyboard;
-        ysInputDevice *m_mainMouse;
+        ysKeyboard *m_mainKeyboard;
+        ysMouse *m_mainMouse;
 
         // Shader Controls
         ysGPUBuffer *m_shaderObjectVariablesBuffer;
