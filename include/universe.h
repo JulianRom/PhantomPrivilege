@@ -32,6 +32,12 @@ namespace bp {
 
         GravitySimulator* getGravitySimulator() { return &m_gravity_simulator; }
 
+        void setScale(double scale) { m_scale = scale; }
+        double getScale() { return m_scale; }
+
+        void DrawScaleModel(dbasic::ModelAsset *model, double size, ysTexture *texture, const ysMatrix &transform);
+        void addScaleLight(dbasic::Light &light);
+
         int getGameObjectCount() const { return m_game_objects.size(); }
 
     private:
@@ -43,6 +49,7 @@ namespace bp {
         dbasic::DeltaEngine* m_engine;
         std::vector<GameObject *> m_spawn_queue;
         std::vector<GameObject *> m_game_objects;
+        double m_scale;
     };
 
 } /* namespace bp */

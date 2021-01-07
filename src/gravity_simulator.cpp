@@ -23,7 +23,7 @@ void bp::GravitySimulator::integrate(float dt)
 void bp::GravitySimulator::clearForces() {
     for (int i = 0; i < m_components.size(); i++) {
         m_components[i]->forceClear();
-        m_components[i]->clearIntersection();
+        m_components[i]->clearIntersections();
     }
 }
 
@@ -45,7 +45,7 @@ void bp::GravitySimulator::generateForces()
             ysVector force = ysMath::Div(delta, tempMath);
 
             float  distance = ysMath::GetScalar(magnitude) - (m_components[i]->getParent()->getSize() + m_components[j]->getParent()->getSize());
-            if (distance <= 0) {
+            if (distance <= 0) { // Elastic collision from objects
                 m_components[i]->addIntersection(m_components[j]->getParent());
                 m_components[j]->addIntersection(m_components[i]->getParent());
                 // = kx = r * d * k / |r|
@@ -53,7 +53,7 @@ void bp::GravitySimulator::generateForces()
                 m_components[i]->forceAdd(ysMath::Negate(springForce));
                 m_components[j]->forceAdd(springForce);
             }
-            else {
+            else { // Gravity from interacting objects
                 m_components[i]->forceAdd(force);
                 m_components[j]->forceAdd(ysMath::Negate(force));
             }

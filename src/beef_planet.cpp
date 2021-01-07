@@ -43,8 +43,11 @@ void bp::BeefPlanet::Initialize(void *instance, ysContextObject::DeviceAPI api) 
     settings.LoggingDirectory = "";
     settings.ShaderDirectory = shaderPath.c_str();
     settings.WindowTitle = "Beef Planet";
+    settings.WindowPositionX = 200;
+    settings.WindowPositionY = 200;
+    settings.WindowHeight = 1000;
+    settings.WindowWidth = 2000;
     ysError err = m_engine.CreateGameWindow(settings);
-
     const ysVector clearColor = ysColor::srgbiToLinear(0x22, 0x00, 0x33);
     m_engine.SetClearColor(clearColor);
 
@@ -70,10 +73,10 @@ void bp::BeefPlanet::Initialize(void *instance, ysContextObject::DeviceAPI api) 
     m_player->setModel(m_assetManager.GetModelAsset("Icosphere"));
 
     m_engine.SetNearClip(1.0f);
-    m_engine.SetFarClip(300.0f);
+    m_engine.SetFarClip(500.0f);
 
     m_engine.SetFogNear(150.0f);
-    m_engine.SetFogFar(300.0f);
+    m_engine.SetFogFar(400.0f);
     m_engine.SetFogColor(clearColor);
 }
 
@@ -115,6 +118,14 @@ void bp::BeefPlanet::Render() {
     m_engine.SetDrawTarget(dbasic::DeltaEngine::DrawTarget::Main);
 
     DrawDebugScreen();
+
+    m_engine.ResetBrdfParameters();
+    m_engine.SetBaseColor(ysColor::srgbiToLinear(0xFF, 0xFF, 0xFF));
+    m_engine.SetObjectTransform(ysMath::TranslationTransform(ysMath::LoadVector(0.0f, 0.0f, 0.0f)));
+    m_engine.SetSpecularRoughness(1.0f);
+    m_engine.SetEmission(ysMath::Mul(ysColor::srgbiToLinear(0xAA, 0xAA, 0xFF), ysMath::LoadScalar(0.2f)));
+    m_engine.DrawModel(m_assetManager.GetModelAsset("Icosphere"), 1.0, nullptr);
+
 }
 
 void bp::BeefPlanet::DrawDebugScreen() {

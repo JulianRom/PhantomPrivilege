@@ -27,20 +27,46 @@ void bp::PhysicalObject::initialize(dbasic::DeltaEngine* engine, Universe* unive
 
 void bp::PhysicalObject::process(float dt)
 {
+    const int collisionCount = m_physics_component.getIntersectionCount();
+    for (int i = 0; i < collisionCount; ++i) {
+        PhysicalObject* object = m_physics_component.getIntersection(i);
+        PhysicsComponent* component = object->getPhysicsComponent();
 
+        if (m_physics_component.getMass() > component->getMass()) {
+            ysVector normal = ysMath::Sub(m_physics_component.m_transform.GetWorldPosition(), component->m_transform.GetWorldPosition());
+            normal = ysMath::Normalize(normal);
+
+            ysVector velocityDirection = ysMath::Normalize(ysMath::Sub(component->getVelocity(), m_physics_component.getVelocity()));
+            const float normalDotVel = ysMath::GetScalar(ysMath::Dot(normal, velocityDirection));
+
+            if (normalDotVel > 0.5) {
+                object->destroyMe();
+                const float currentMass = m_physics_component.getMass();
+                updateMass(currentMass + component->getMass());
+            }
+            else {
+
+            }
+        }
+
+    }
 }
 
 void bp::PhysicalObject::render()
 {
     m_engine->ResetBrdfParameters();
     m_engine->SetBaseColor(m_color);
-    m_engine->SetObjectTransform(m_physics_component.m_transform.GetWorldTransform());
     m_engine->SetSpecularRoughness(1.0f);
-    m_engine->DrawModel(m_model, m_size, nullptr);
+    m_universe->DrawScaleModel(m_model, m_size, nullptr, m_physics_component.m_transform.GetWorldTransform());
 }
 
 void bp::PhysicalObject::updateMass(float mass)
 {
     getPhysicsComponent()->setMass(mass);
     m_size = std::pow(m_physics_component.getMass(), 1.0 / 3.0);
+}
+
+void bp::PhysicalObject::free()
+{
+    m_universe->getGravitySimulator()->deregisterComponent(&m_physics_component);
 }

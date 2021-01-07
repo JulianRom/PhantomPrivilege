@@ -4,12 +4,13 @@
 #include "delta.h"
 
 namespace bp {
+    class Universe;
     class MouseController {
     public:
         MouseController();
         ~MouseController();
 
-        void initialize(dbasic::DeltaEngine* engine);
+        void initialize(dbasic::DeltaEngine* engine, Universe* universe);
         void process(const ysVector& planet_position);
         void destroy();
         void setZoom(float zoom) { m_zoom = zoom; }
@@ -18,6 +19,7 @@ namespace bp {
 
         void getMouseChange(int* x, int* y);
         dbasic::DeltaEngine* m_engine;
+        Universe* m_universe;
         int m_mouse_x;
         int m_mouse_y;
         int m_pre_x;

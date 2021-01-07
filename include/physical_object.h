@@ -26,6 +26,8 @@ namespace bp {
         virtual void updateMass(float mass);
         float getSize() { return m_size; }
 
+        virtual void free();
+
     protected:
         PhysicsComponent m_physics_component;
 

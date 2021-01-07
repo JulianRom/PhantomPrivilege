@@ -23,6 +23,8 @@ namespace bp {
         void destroyMe() { m_for_deletion = true; }
         bool deletionFlag() { return m_for_deletion; }
 
+        virtual void free();
+
     private:
         unsigned int m_id;
         bool m_for_deletion;

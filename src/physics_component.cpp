@@ -20,12 +20,12 @@ void bp::PhysicsComponent::integrate(float dt)
     ysVector position = m_transform.GetPositionParentSpace();
     ysVector limiter = ysMath::LoadVector(1000.0, 1000.0, 1000.0, 1000.0);
 
-    acceleration = ysMath::Mul(ysMath::ComponentMax(ysMath::ComponentMin(m_force_accumulator, limiter), ysMath::Negate(limiter)), inverse_mass);
+    acceleration = ysMath::ComponentMax(ysMath::ComponentMin(ysMath::Mul(m_force_accumulator, inverse_mass), limiter), ysMath::Negate(limiter));
     m_velocity = ysMath::Add(m_velocity, ysMath::Mul(acceleration, time_step));
     m_transform.SetPosition(ysMath::Add(position, ysMath::Mul(m_velocity, time_step)));
 }
 
-void bp::PhysicsComponent::clearIntersection()
+void bp::PhysicsComponent::clearIntersections()
 {
     m_intersections.clear();
 }

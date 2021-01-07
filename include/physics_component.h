@@ -24,8 +24,11 @@ namespace bp {
         ysVector getVelocity() { return m_velocity; }
         void setParent(PhysicalObject* parent) { m_parent = parent; }
         PhysicalObject* getParent() { return m_parent; }
-        void clearIntersection();
+
+        void clearIntersections();
         void addIntersection(PhysicalObject* secondObject);
+        int getIntersectionCount() const { return m_intersections.size(); }
+        PhysicalObject* getIntersection(int index) { return m_intersections[index]; }
 
     private:
         float m_inverse_mass;

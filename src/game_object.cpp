@@ -25,3 +25,7 @@ void bp::GameObject::process(float dt)
 void bp::GameObject::render()
 {
 }
+
+void bp::GameObject::free()
+{
+}
